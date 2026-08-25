@@ -12,7 +12,7 @@ A simple expert system, animal guessing game. Currently allows player to add to 
 
 <ul>
 	<li>
-- Ch.4 - We set up a pygame with predators (red ball) chasing a user controlled player (blue) on a game board, with random grass (green) for the player to eat.
+- Ch.4 - We set up a pygame with predators (red ball) chasing a user controlled player (blue ball) on a game board, with random grass (green spikes) for the player to eat.
 	</li>
 </ul>
 
