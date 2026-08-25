@@ -3,7 +3,7 @@ import pickle
 import  tkinter as tk
 from tkinter import ttk, messagebox, simpledialog, IntVar
 
-datafile = 'Doolittle data.dat'
+datafile = 'Dolittle data.dat'
 
 class KnowledgeBase :
     def __init__(self) :
@@ -12,6 +12,7 @@ class KnowledgeBase :
 
 class Query :
     def __init__(self, question, yeses=set(), nos=set()) :
+        self.question = question
         self.yeses = yeses
         self.nos = nos
     
@@ -80,7 +81,7 @@ def fillInOldQueries(queries, newAnimal) :
     dialog = CompleteQueryDialog(root, question, options)
     root.wait_window(dialog.top)
 
-    for i in range(leng(options)) :
+    for i in range(len(options)) :
         if options[i] in dialog.yeses :
             queries[i].yeses.add(newAnimal)
         else :
@@ -88,7 +89,7 @@ def fillInOldQueries(queries, newAnimal) :
 
 def canWeFind(newAnimal) :
     possible = knowledgeBase.animals
-    for query = in knowledgeBase.queries :
+    for query in knowledgeBase.queries :
         
         if newAnimal in query.yeses :
             possible = possible.intersection(query.yeses)
@@ -97,14 +98,96 @@ def canWeFind(newAnimal) :
             possible = possible.intersection(query.nos)
     return len(possible) == 1
 
+def giveUp(asked) :
+    newAnimal = ''
+
+    while len(newAnimal) == 0 :
+
+        newAnimal = tk.simpledialog.askstring('I give up.', 'What animal are you thinking of?')
+
+    for q in asked :
+        a = asked[q]
+
+        if a == 'yes' :
+            q.yeses.add(newAnimal)
+        else :
+            q.nos.add(newAnimal)
+
+    return newAnimal
+
+def newQuery(newAnimal, wrongAnimal) :
+    global knowledgeBase
+
+    question = tk.simpledialog.askstring('I give up.', 
+            'What is a question that would differentiate a '\
+                    + newAnimal + ' from a ' + wrongAnimal + '?')
+
+    query = Query(question)
+
+    query.yeses, query.nos = completeQuery(question, knowledgeBase.animals, newAnimal)
+
+    return query
+
+def getBestQuery(possible, queries) :
+    best = None
+    bestBalance = 9999999 
+
+    for query in queries :
+        yes = query.yeses.intersection(possible)
+        no = query.nos.intersection(possible)
+        balance = abs(len(yes) - len(no))
+
+        if balance < bestBalance :
+            best = query
+            bestBalance = balance
+
+    return best
 
 def guessAnimal() :
-    pass
-#-------------------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------
-#           left off here
-#-------------------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------
+    global goButton, knowledgeBase
+
+    goButton['state'] = tk.DISABLED
+    possible = set(knowledgeBase.animals)
+    notasked = list(knowledgeBase.queries)
+    asked = dict()
+
+    while True :
+        if len(possible) == 0 :
+            knowledgeBase.animals.add(giveUp(asked))
+            break
+        elif len(possible) == 1 :
+            [guess] = possible #unpack a singleton from a set
+            gotIt = tk.messagebox.askquestion('I think I know.', 'Is your animal a ' + guess + '?')
+
+            if gotIt == 'yes' :
+                tk.messagebox.showinfo('Yes!', 'I am the greatest')
+                print('Answered correctly because a', guess)
+                for q in asked :
+                    a = asked[q]
+                    print(' ', q.question, '==', a)
+                print('QED')
+            else :
+                newAnimal = giveUp(asked)
+                if len(notasked) > 0 :
+                    fillInOldQueries(notasked, newAnimal)
+
+                knowledgeBase.animals.add(newAnimal)
+
+                if not canWeFind(newAnimal) :
+                    query = newQuery(newAnimal, guess)
+                    knowledgeBase.queries.append(query)
+            break
+
+        query = getBestQuery(possible, notasked)
+        if query == None :
+            print('Run out of queries. asked=', asked, 'notasked=', notasked)
+            exit(1)
+
+        possible, response = query.ask(possible)
+        asked[(query)] = response
+        notasked.remove(query)
+
+    goButton['state'] = tk.NORMAL
 
 # Load the knowledge base
 try :
