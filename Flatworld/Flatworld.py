@@ -59,17 +59,17 @@ class Organism :
         organism = anyCollision(newPosition, ignore = self)
 
         if organism != None :
-            return organism
+#            return organism
 
 # --------------------------------------------
 
 # if you want Red to pass through grass, comment out the 'return organism' above and uncomment the follow:
 
-#            if isinstance(organism, Grass) and isinstance(self, Red) :      
-#                self.position = newPosition
-#                return organism                                             
-#            else :                    
-#                return organism 
+            if isinstance(organism, Grass) and isinstance(self, Red) :      
+                self.position = newPosition
+                return organism                                             
+            else :                    
+                return organism 
 
 # --------------------------------------------
         else :                              
@@ -151,7 +151,11 @@ class Blue(Creature) :
 
     def hit(self, blocker) :
         if isinstance(blocker, Grass) :
-            self.speed += 1
+            if blocker.color == 'green' :
+                self.speed += 1                 # eating green grass gains speed
+            if blocker.color == 'brown' :
+                self.speed -= 10                 # eating brown trampled grass loses speed
+                self.color = 'darkgreen'
             blocker.getBitten()
 
 class Player(Blue) :
@@ -204,7 +208,7 @@ class Red(Creature) :
 def getHeight() :
     return field.get_height()
 def getWidth() :
-    return field.get_Width()
+    return field.get_width()
 def getOrganisms() :
     return organisms
 def getField() :
