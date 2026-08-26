@@ -59,11 +59,19 @@ class Organism :
         organism = anyCollision(newPosition, ignore = self)
 
         if organism != None :
-            if isinstance(organism, Grass) and isinstance(self, Red) :      # added this if else to allow Red
-                self.position = newPosition                                 # to pass through grass
-                return organism                                             # without it, Red always gets stuck and
-            else :                                                          # can never reach Blue (always in corners)
-                return organism
+            return organism
+
+# --------------------------------------------
+
+# if you want Red to pass through grass, comment out the 'return organism' above and uncomment the follow:
+
+#            if isinstance(organism, Grass) and isinstance(self, Red) :      
+#                self.position = newPosition
+#                return organism                                             
+#            else :                    
+#                return organism 
+
+# --------------------------------------------
         else :                              
             self.position = newPosition
             return None
@@ -131,8 +139,7 @@ class Grass(Organism) :
 class Blue(Creature) :
     def __init__(self, position) :
 
-        # slowed down speed from 300 to 200 for fuzzy logic
-        super().__init__(position, 200, 'blue')
+        super().__init__(position, 300, 'blue')
 
     def getBitten(self) :
         global creatures
@@ -166,9 +173,10 @@ class Player(Blue) :
 class Red(Creature) :
     def __init__(self, position) :
 
-        # player is eaten too fast at start (ends game), slowing red speed from 200 to 50
-        #       - sped up for fuzzy logic
-        super().__init__(position, 100, 'red')       
+        # player is eaten too fast at start (ends game)
+        #       - for manual player: slow red speed from 200 to 50
+        #       - for fuzzy logic: speed red back up to 200
+        super().__init__(position, 200, 'red')       
 
     def moveDirection(self) :
         nearestDist = 2000.0

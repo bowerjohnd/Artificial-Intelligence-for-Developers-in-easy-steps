@@ -30,9 +30,6 @@ class Fuzzy :
     def __repr__(self) :
         return str(self.value)
 
-def closeTo(dist) :
-    return Fuzzy(1 / (max(1, dist)/20) ** 2)
-
 class Spot :
     def __init__(self, position, thing) :
         vector = thing.position - position
@@ -116,7 +113,7 @@ class FuzzyLogicBot(Blue) :
 
             self.scared = Fuzzy(1)
         else :
-            self.scared = Fuzzy(0.9)
+            self.scared &= Fuzzy(0.9)
 
     def moveDirection(self) :
         self.spots = getSpots(self)
@@ -144,7 +141,7 @@ class FuzzyLogicBot(Blue) :
         
         return move
 
-    def choseUnscaredDirection(self) :
+    def chooseUnscaredDirection(self) :
         move = pygame.Vector2()
 
         if self.isGoodIn[N] > self.isGoodIn[S] :
@@ -159,6 +156,10 @@ class FuzzyLogicBot(Blue) :
 
         return move
 
+
+def closeTo(dist) :
+    return Fuzzy(1 / (max(1, dist)/20) ** 2)
+
 if __name__ == '__main__' :
     pygame.init()
 
@@ -167,7 +168,7 @@ if __name__ == '__main__' :
                     Red: 4,
                     FuzzyLogicBot: 10,
                     Grass: 60},
-                spawnInterval = 60,
+                spawnInterval = 30,
                 periodicSpawns = {Grass: 4},
                 boardSize = (750, 500), 
                 playerType = Blue)
