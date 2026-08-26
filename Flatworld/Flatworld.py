@@ -59,8 +59,12 @@ class Organism :
         organism = anyCollision(newPosition, ignore = self)
 
         if organism != None :
-            return organism
-        else :
+            if isinstance(organism, Grass) and isinstance(self, Red) :      # added this if else to allow Red
+                self.position = newPosition                                 # to pass through grass
+                return organism                                             # without it, Red always gets stuck and
+            else :                                                          # can never reach Blue (always in corners)
+                return organism
+        else :                              
             self.position = newPosition
             return None
 
@@ -98,6 +102,10 @@ class Grass(Organism) :
     def __init__(self, position) :
         super().__init__(position)
         self.leaves = 5
+        self.color = 'green'
+
+    def getTrampled(self) :             # added for fun
+        self.color = 'brown'
 
     def getBitten(self) :
 
@@ -118,11 +126,13 @@ class Grass(Organism) :
         s = 20 // self.leaves
 
         for x in range(a + s // 2, b, s) :
-            pygame.draw.line(field, 'green', (c, bottom), (x, top))
+            pygame.draw.line(field, self.color, (c, bottom), (x, top))
 
 class Blue(Creature) :
     def __init__(self, position) :
-        super().__init__(position, 300, 'blue')
+
+        # slowed down speed from 300 to 200 for fuzzy logic
+        super().__init__(position, 200, 'blue')
 
     def getBitten(self) :
         global creatures
@@ -155,7 +165,10 @@ class Player(Blue) :
 
 class Red(Creature) :
     def __init__(self, position) :
-        super().__init__(position, 50, 'red')       # player is eaten too fast at start (ends game), slowing red speed from 200 to 50
+
+        # player is eaten too fast at start (ends game), slowing red speed from 200 to 50
+        #       - sped up for fuzzy logic
+        super().__init__(position, 100, 'red')       
 
     def moveDirection(self) :
         nearestDist = 2000.0
@@ -177,21 +190,23 @@ class Red(Creature) :
     def hit(self, blocker) :
         if isinstance(blocker, Blue) :
             blocker.getBitten()
+        if isinstance(blocker, Grass) :         # added for fun
+            blocker.getTrampled()
 
-    def getHeight() :
-        return field.get_height()
-    def getWidth() :
-        return field.get_Width()
-    def getOrganisms() :
-        return organisms
-    def getField() :
-        return field
-    def setOrganisms(o) :
-        global organisms
-        organisms = o
-    def setField(f) :
-        global field
-        field = f
+def getHeight() :
+    return field.get_height()
+def getWidth() :
+    return field.get_Width()
+def getOrganisms() :
+    return organisms
+def getField() :
+    return field
+def setOrganisms(o) :
+    global organisms
+    organisms = o
+def setField(f) :
+    global field
+    field = f
 
 def mainLoop(initialSpawns, spawnInterval, periodicSpawns, boardSize, playerType) :
     global organisms, field
@@ -209,7 +224,7 @@ def mainLoop(initialSpawns, spawnInterval, periodicSpawns, boardSize, playerType
 
         for event in pygame.event.get() :
             if event.type == pygame.QUIT :
-                running = false
+                running = False
 
         field.fill('white')
 
