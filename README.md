@@ -22,4 +22,11 @@ A simple expert system, animal guessing game. Currently allows player to add to 
 	</li>
 </ul>
 
+**Flatworld, cont.**  
+
+<ul>
+	<li>
+- Ch.7 - Using the previous Flatworld board, we now have bees finding flowers. Genetic algorithms are used to mutate the bees' chromosomes after each generation to better improve their efficiency.
+	</li>
+</ul>
 
