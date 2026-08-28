@@ -22,6 +22,91 @@ class Flower(Grass) :
                 getOrganisms().remove(self)
                 self.nest.replaceIndividual(self)
 
+class Nest(object) :
+    def __init__(self, position, population = 10) :
+        self.position = position
+        self.score = 0
+        self.individuals = [ \
+                self.spawn(self.getPosition(position, i))
+                    for i in range(population)]
+
+    def getMembers(self) :
+        return self.individuals
+
+    def incrementScore(self) :
+        self.score += 1
+
+    def getScore(self) :
+        return self.score
+
+    def replaceIndividual(self, thing) :
+        if thing in self.individuals :
+            i = self.individuals.index(thing)
+            position = self.getPosition(self.position, i)
+
+            if position != None :
+                self.individuals[i] = self.spawn(position)
+                getOrganisms().append(self.individuals[i])
+
+    def tick(self, secondsSinceLastFrame) :
+        pass
+
+    def spawn(self, position) :
+        raise(NotImplementedError)
+
+    def getPosition(self, center, index) :
+        return center
+
+class Meadow(Nest) :
+    def __init__(self, position) :
+        super().__init__(position, 10)
+
+    def getPosition(self, center, index) :
+        x = int(center.x)
+        y = int(center.y)
+
+        for i in range(100) :
+            position = pygame.Vector2(
+                            random.randint(x - 50, x + 50),
+                            random.randint(y - 50, y + 50))
+            if anyCollision(position) == None :
+                return position
+        return None
+
+    def spawn(self, position) :
+        return Flower(self, position)
+
+class BeeHive(Nest) :
+    def __init__(self, position, index, chromosome = None) :
+        self.speed = 500
+        self.chromosome = Chromosome(chromosome)
+        self.index = index
+        super().__init__(position, 10)
+
+    def spawn(self, position) :
+        return Bee(self, position, self.speed, self.getColor())
+
+    def getColor(self) :
+        colors = ['gray20', 'sienna', 'lightcoral', 'tan',
+                  'lightgoldenrod1', 'darkolivegreen2',
+                  'deepskyblue', 'magenta3', 'gray80']
+        return pygame.Color(colors[self.index])
+
+    def tick(self, secondsSinceLastFrame) :
+        self.draw(self.position)
+
+    def draw(self, position) :
+        if enableDraw :
+            pygame.draw.circle(getField(), self.getColor(), position, 20, width = 3)
+
+    def getFoodLocation(self) :
+        dancing = filter(lambda x: x.isDancing(), self.individuals)
+
+        locations = list(map(attrgetter('foodLocation'), dancing))
+
+        return random.choice(locations) \
+                if len(locations) > 0 else None
+
 class Insect(Organism) :
     def __init__(self, nest, position, speed, color) :
         super().__init__(position)
@@ -168,6 +253,7 @@ class Bee(Insect) :
                 else :
                     self.atHomeCounter = self.nest.chromosome.restPeriod()
                     self.awayFromHomeCounter = 0
+                    self.goingHome = False
 
                     if self.carryingFood :
                         self.carryingFood = False
@@ -178,8 +264,8 @@ class Bee(Insect) :
             if self.targetLocation != None and distanceFrom(self.position, self.targetLocation) < 10 :
                 self.targetLocation = None
 
-            if self.awayFromHomeCounter > self.nest.chromosome.exhaustionPeriod() :
-                self.goingHome = True
+        if self.awayFromHomeCounter > self.nest.chromosome.exhaustionPeriod() :
+            self.goingHome = True
 
         if random.randint(0,100) < self.nest.chromosome.fidgetChance() :
             if self.goingHome and random.randint(0, 100) < self.nest.chromosome.concentrateHome() :
@@ -205,7 +291,7 @@ def OneRepeat(clock, chromosomes, generation) :
     organisms = []
     setOrganisms(organisms)
     nests = []
-    frameDecimation = 300               # frames to skip between draws: lower might flash screen (photosensitivity), higher is safer
+    frameDecimation = 30               # frames to skip between draws: lower might flash screen (photosensitivity), higher is safer
 
     for meadow in range(3) :
         spawn = Meadow(randomDrop())
@@ -217,7 +303,7 @@ def OneRepeat(clock, chromosomes, generation) :
         spawn = BeeHive(randomDrop(), i, chromosome)
         organisms += spawn.getMembers()
         nests.append(spawn)
-        i += i
+        i += 1
 
     for tickCounter in range(5000) :
         if tickCounter % frameDecimation == 0 :
@@ -252,87 +338,8 @@ def OneRepeat(clock, chromosomes, generation) :
     return list(filter(lambda x: isinstance(x, BeeHive), nests))
 
 
-class Nest(object) :
-    def __init__(self, position, population = 10) :
-        self.position = position
-        self.score = 0
-        self.individuals = [
-                self.spawn(self.getPosition(position, i))
-                    for i in range(population)]
 
-    def getMembers(self) :
-        return self.individuals
 
-    def incrementScore(self) :
-        self.score += 1
-
-    def getScore(self) :
-        return self.score
-
-    def replaceIndividual(self, thing) :
-        if thing in self.individuals :
-            i = self.individuals.index(thing)
-            position = self.getPosition(self.position, i)
-            getOrganisms().append(self.individuals[i])
-
-    def tick(self, secondsSinceLastFrame) :
-        pass
-
-    def spawn(self, position) :
-        raise(NotImplementedError)
-
-    def getPosition(self, center, index) :
-        return center
-
-class Meadow(Nest) :
-    def __init__(self, position) :
-        super().__init__(position, 10)
-
-    def getPosition(self, center, index) :
-        x = int(center.x)
-        y = int(center.y)
-
-        for i in range(100) :
-            position = pygame.Vector2(
-                            random.randint(x - 50, x + 50),
-                            random.randint(y - 50, y + 50))
-            if anyCollision(position) == None :
-                return position
-        return None
-
-    def spawn(self, position) :
-        return Flower(self, position)
-
-class BeeHive(Nest) :
-    def __init__(self, position, index, chromosome = None) :
-        self.speed = 500
-        self.chromosome = Chromosome(chromosome)
-        self.index = index
-        super().__init__(position, 10)
-
-    def spawn(self, position) :
-        return Bee(self, position, self.speed, self.getColor())
-
-    def getColor(self) :
-        colors = ['gray20', 'sienna', 'lightcoral', 'tan',
-                  'lightgoldenrod1', 'darkolivegreen2',
-                  'deepskyblue', 'magenta3', 'gray80']
-        return pygame.Color(colors[self.index])
-
-    def tick(self, secondsSinceLastFrame) :
-        self.draw(self.position)
-
-    def draw(self, position) :
-        if enableDraw :
-            pygame.draw.circle(getField(), self.getColor(), position, 20, width = 3)
-
-    def getFoodLocation(self) :
-        dancing = filter(lambda x: x.isDancing(), self.individuals)
-
-        locations = list(map(attrgetter('foodLocation'), dancing))
-
-        return random.choice(locations) \
-                if len(locations) > 0 else None
 
 def insectMainLoop(boardSize) :
     global field
