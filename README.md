@@ -26,7 +26,10 @@ A simple expert system, animal guessing game. Currently allows player to add to 
 
 <ul>
 	<li>
-- Ch.7 - Using the previous Flatworld board, we now have bees finding flowers. Genetic algorithms are used to mutate the bees' chromosomes after each generation to better improve their efficiency.
+- Ch.7 - Using the previous Flatworld board, we now have bees finding flowers. Genetic algorithms are used to mutate the bees' chromosomes after each generation to better improve their efficiency. Machine Learning.
+	</li>
+	<li>
+- Ch.8 - Returning the predators and grass eating herbivores to the Flatworld, we include genetics from the previous chapter and implement a neural network for the movement of each type of creature. TensorFlow and NumPy used.
 	</li>
 </ul>
 
