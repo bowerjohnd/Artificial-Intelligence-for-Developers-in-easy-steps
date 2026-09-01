@@ -176,7 +176,7 @@ class Creature(Insect) :
 
         organisms = anyCollision(newPosition, ignore = self, ignoreType = type(self))
 
-        if organisms != None :                                   # add in predator moves thru grass here
+        if organisms != None :  
             return organisms
         else :
             self.position = newPosition
@@ -210,7 +210,6 @@ class Carnivore(Creature) :
         if type(blocker) == Herbivore :
             blocker.getBitten()
             self.score += 1
-        #----------------------------------- can add in trample grass here
 
 class Herbivore(Creature) :
     def __init__(self, chromosome, position) :
