@@ -29,6 +29,16 @@ Artificial Intelligence for Developers in Easy Steps, Richard Urwin © 2024 by I
 </ul>
 
 **Pretrained Neural Netwrok**  
+<ul>
+	<li>
 - Ch.9 - Setting up and pretraining a model for recognizing hand-written digits, then testing it on your own written numbers.
+	</li>
+	<li>
+- Prepare and Process user created input images of hand-written digits. Write down a series of numbers, the SplitChar program will identify the numbers and separate them into negative images. Note: overlapping numbers and random marks will show up and be included in the data, so double-check is needed.
+	</li>
+	<li>
+- Runs the user created images input folder through the pretrained model and prints what the model predicted was your numbers.
+	</li>
+</ul>
 
 
