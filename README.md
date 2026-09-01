@@ -20,11 +20,6 @@ Artificial Intelligence for Developers in Easy Steps, Richard Urwin © 2024 by I
 	<li>
 - Ch.6 - Improved fuzzy bots (blue ball) with subsumption with dinstinct wander/feed/flee behaviors. By adding the subsumption, the fuzzy bots survive much longer and do not get stuck on the walls or corners of the game board.
 	</li>
-</ul>
-
-**Flatworld, cont.**  
-
-<ul>
 	<li>
 - Ch.7 - Using the previous Flatworld board, we now have bees finding flowers. Genetic algorithms are used to mutate the bees' chromosomes after each generation to better improve their efficiency. Machine Learning.
 	</li>
@@ -34,6 +29,6 @@ Artificial Intelligence for Developers in Easy Steps, Richard Urwin © 2024 by I
 </ul>
 
 **Pretrained Neural Netwrok**  
-- Ch.9 - Setting up a pretrained model for recognizing hand-written digits, then testing it on your own written numbers.
+- Ch.9 - Setting up and pretraining a model for recognizing hand-written digits, then testing it on your own written numbers.
 
 
