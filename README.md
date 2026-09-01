@@ -3,10 +3,10 @@
 Artificial Intelligence for Developers in Easy Steps, Richard Urwin © 2024 by In Easy Steps Limited.
 
 **ELIZA**  
-Simple chatbot based on the 1966 ELIZA program by Joseph Weizenbaum.
+- Ch.2 - Simple chatbot based on the 1966 ELIZA program by Joseph Weizenbaum.
 
 **Dolittle**  
-A simple expert system, animal guessing game. Currently allows player to add to knowledge base.
+- Ch.3 - A simple expert system, animal guessing game. Currently allows player to add to knowledge base.
 
 **Flatworld**  
 
@@ -32,4 +32,8 @@ A simple expert system, animal guessing game. Currently allows player to add to 
 - Ch.8 - Returning the predators and grass eating herbivores to the Flatworld, we include genetics from the previous chapter and implement a neural network for the movement of each type of creature. TensorFlow and NumPy used.
 	</li>
 </ul>
+
+**Pretrained Neural Netwrok**  
+- Ch.9 - Setting up a pretrained model for recognizing hand-written digits, then testing it on your own written numbers.
+
 
