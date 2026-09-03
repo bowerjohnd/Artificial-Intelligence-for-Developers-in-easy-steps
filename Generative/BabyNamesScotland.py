@@ -103,6 +103,8 @@ def lstmModel(embeddingDimension, lstmUnits, loss_fn, vocabSize, batchSize, sequ
 
     model = tf.keras.Sequential( [
 
+        tf.keras.layers.Embedding(vocabSize, embeddingDimension),
+
         tf.keras.layers.LSTM(
                     lstmUnits,
                     return_sequences=True,
@@ -120,10 +122,8 @@ def lstmModel(embeddingDimension, lstmUnits, loss_fn, vocabSize, batchSize, sequ
 
 # TRAINING
 
-def trainModel(model, data, loss_fn) :              # book mistake, missing loss_fn
+def trainModel(model, data, loss_fn) :      
     steps = len(data.trainingX) // batchSize
-
-#    loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)      # in book pg.158, not in author's example
 
     previousLoss = 9999
 
