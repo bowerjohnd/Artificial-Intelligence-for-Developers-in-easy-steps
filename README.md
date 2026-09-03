@@ -41,4 +41,11 @@ Artificial Intelligence for Developers in Easy Steps, Richard Urwin © 2024 by I
 	</li>
 </ul>
 
+**Generative AI**  
+<ul>
+	<li>
+- Ch.10 - Generating a list of baby names, trained on the National Records of Scotland statistics for Babies' First Names. This program reads in a csv file with baby names registered in Scotland from 1974 to 2023, collects all the characters used, batches combinations to analyze, and generates a list of possible new and unique baby names. (note: suggests running this with GPU. mine took ~7 minutes per epoch w/o GPU)
+	</li>
+</ul>
+
 
