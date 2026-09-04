@@ -48,4 +48,8 @@ Artificial Intelligence for Developers in Easy Steps, Richard Urwin © 2024 by I
 	</li>
 </ul>
 
+**Low Code**
+<ul>
+	<li>
+- Ch. 11 - Setting up Docker Desktop, using a pycaret image, we use a jupyter notebook to evaluate and optimize a dataset provided by PyCaret about forecasting the onset of diabetes.
 
