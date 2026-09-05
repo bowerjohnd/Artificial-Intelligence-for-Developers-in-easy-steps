@@ -52,4 +52,12 @@ Artificial Intelligence for Developers in Easy Steps, Richard Urwin © 2024 by I
 <ul>
 	<li>
 - Ch. 11 - Setting up Docker Desktop, using a pycaret image, we use a jupyter notebook to evaluate and optimize a dataset provided by PyCaret about forecasting the onset of diabetes.
+	</li>
+	<li>
+- Training a pycaret model for baby names, what gender a baby name is most likely assigned to, comparing models, and optimizing the threshold. Using the model on a set of user-entered names that are not found in the original source. *had issues with an absurdly long wait on the optimize_threshold() method, so I interrupted that step and continued with the next steps (will update if I revisit).*
+	</li>
+	<li>
+- Other model types, Regression and Time Series examples in Jupyter Notebook. *Time series plot not showing for me, may revisit*
+	</li>
+</ul>
 
